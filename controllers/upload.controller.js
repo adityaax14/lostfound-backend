@@ -10,10 +10,16 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 // returns the public URL to store in the items table
 export const uploadImage = async (req, res) => {
   try {
-    const { base64, mimeType, fileName } = req.body;
+    const { base64, fileName } = req.body;
+    let { mimeType } = req.body;
 
-    if (!base64 || !mimeType) {
+    if (!base64) {
       return res.status(400).json({ error: "Image data is required" });
+    }
+
+    // Camera captures on some mobile browsers send empty mimeType — default to jpeg
+    if (!mimeType || mimeType.trim() === "") {
+      mimeType = "image/jpeg";
     }
 
     if (!ALLOWED_TYPES.includes(mimeType)) {
