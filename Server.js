@@ -18,5 +18,10 @@ app.use(express.json({ limit: "10mb" }));
 
 app.use("/items", itemRoutes);
 
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Lost & Found server running on port ${PORT}`));
+// Only listen when running locally (not in Vercel serverless)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => console.log(`Lost & Found server running on port ${PORT}`));
+}
+
+export default app;
